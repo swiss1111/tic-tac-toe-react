@@ -1,37 +1,53 @@
 import Head from 'next/head'
 import Layout from '../components/layout'
 import utilStyles from '../styles/game.module.css'
-import {useState} from 'react';
-import {createEmptyTable} from "../utils/gameUtils";
+import {useEffect, useState} from 'react';
+import {createEmptyTable, getWinner} from "../utils/gameUtils";
 
 export default function Home() {
     const [size, setSize] = useState(3);
-    const [currentPlayer, setCurrentPlayer] = useState(1);
     const [table, setTable] = useState(createEmptyTable(size));
+    const [currentPlayer, setCurrentPlayer] = useState(1);
+    const [winner, setWinner] = useState(0);
+
+    useEffect(() => {
+        // TODO: create fancy winner popup
+        switch (winner) {
+            case 1:
+                alert("Winner: x");
+                break;
+            case 2:
+                alert("Winner: O");
+                break;
+            case 3:
+                alert("Draw");
+                break;
+        }
+    }, [winner])
 
     function changePlayer() {
         setCurrentPlayer(currentPlayer === 1 ? 2 : 1);
-    };
+    }
 
     function reset() {
         setTable(createEmptyTable(size));
         setCurrentPlayer(1);
-        console.log("index.tsx reset", size, table);
-    };
+        setWinner(0);
+    }
 
     function save() {
         console.log("index.tsx save");
-    };
+    }
 
     function sizeChange(size: number) {
         setSize(size);
         setTable(createEmptyTable(size));
         setCurrentPlayer(1);
-        console.log("index.tsx sizeChange", size);
-    };
+        setWinner(0);
+    }
 
     function cellClick(colIndex: number, rowIndex: number) {
-        if (table[colIndex][rowIndex] !== 0) {
+        if (table[colIndex][rowIndex] !== 0 || winner) {
             return
         }
 
@@ -39,8 +55,22 @@ export default function Home() {
         tempTable[colIndex][rowIndex] = currentPlayer;
         setTable(tempTable);
 
-        changePlayer();
-    };
+        setWinner(getWinner(tempTable, size));
+
+        if (!winner) {
+            changePlayer();
+            return
+        }
+    }
+
+    function renderText(value: number): string {
+        if (value === 1) {
+            return 'x'
+        } else if (value === 2) {
+            return 'O'
+        }
+        return ''
+    }
 
     return (
         <Layout home>
@@ -83,7 +113,7 @@ export default function Home() {
                                             <button className={utilStyles.tableButton} onClick={() => {
                                                 cellClick(colIndex, rowIndex)
                                             }}>
-                                                {cell}
+                                                {renderText(cell)}
                                             </button>
                                         </div>
                                     ))}

@@ -1,15 +1,22 @@
 import Head from 'next/head'
-import Layout, {siteTitle} from '../components/layout'
+import Layout from '../components/layout'
 import utilStyles from '../styles/game.module.css'
-import {getSortedPostsData} from '../lib/posts'
-import {GetStaticProps} from 'next'
+import {useState} from 'react';
+import {createEmptyTable} from "../utils/gameUtils";
 
 export default function Home() {
-    const size: number = 3;
-    const table: number[][] = [[0, 0, 0,], [0, 0, 0,], [0, 0, 0,]];
+    const [size, setSize] = useState(3);
+    const [currentPlayer, setCurrentPlayer] = useState(1);
+    const [table, setTable] = useState(createEmptyTable(size));
+
+    function changePlayer() {
+        setCurrentPlayer(currentPlayer === 1 ? 2 : 1);
+    };
 
     function reset() {
-        console.log("index.tsx reset");
+        setTable(createEmptyTable(size));
+        setCurrentPlayer(1);
+        console.log("index.tsx reset", size, table);
     };
 
     function save() {
@@ -17,11 +24,22 @@ export default function Home() {
     };
 
     function sizeChange(size: number) {
+        setSize(size);
+        setTable(createEmptyTable(size));
+        setCurrentPlayer(1);
         console.log("index.tsx sizeChange", size);
     };
 
     function cellClick(colIndex: number, rowIndex: number) {
-        console.log("index.tsx cellClick", colIndex, rowIndex);
+        if (table[colIndex][rowIndex] !== 0) {
+            return
+        }
+
+        const tempTable = [...table];
+        tempTable[colIndex][rowIndex] = currentPlayer;
+        setTable(tempTable);
+
+        changePlayer();
     };
 
     return (

@@ -2,7 +2,7 @@ import Head from 'next/head'
 import Layout from '../components/layout'
 import utilStyles from '../styles/game.module.css'
 import {useEffect, useState} from 'react';
-import {createEmptyTable, getWinner} from "../utils/gameUtils";
+import {createEmptyTable, createTableSizesArray, getWinner} from "../utils/gameUtils";
 
 export default function Home() {
     const [size, setSize] = useState(3);
@@ -65,7 +65,7 @@ export default function Home() {
 
     function renderText(value: number): string {
         if (value === 1) {
-            return 'x'
+            return 'X'
         } else if (value === 2) {
             return 'O'
         }
@@ -87,21 +87,10 @@ export default function Home() {
                         save()
                     }}>Save
                     </button>
-                    {size !== 3 && (<button className={utilStyles.controllersButton} onClick={() => {
-                        sizeChange(3)
-                    }}>3x3</button>)}
-                    {size !== 4 && (<button className={utilStyles.controllersButton} onClick={() => {
-                        sizeChange(4)
-                    }}>4x4</button>)}
-                    {size !== 5 && (<button className={utilStyles.controllersButton} onClick={() => {
-                        sizeChange(5)
-                    }}>5x5</button>)}
-                    {size !== 6 && (<button className={utilStyles.controllersButton} onClick={() => {
-                        sizeChange(6)
-                    }}>6x6</button>)}
-                    {size !== 7 && (<button className={utilStyles.controllersButton} onClick={() => {
-                        sizeChange(7)
-                    }}>7x7</button>)}
+                    {createTableSizesArray().filter(newSize => newSize !== size).map(newSize => (
+                        <button key={newSize} className={utilStyles.controllersButton} onClick={() => {
+                            sizeChange(newSize)
+                        }}>{`${newSize}x${newSize}`}</button>))}
                 </div>
                 <div className={utilStyles.stretchyWrapper}>
                     <div className={utilStyles.container}>

@@ -1,3 +1,13 @@
+export function createTableSizesArray(start = 3, end = 7): number[] {
+  const result: number[] = [];
+
+  for (let i = start; i <= end; i++) {
+    result.push(i);
+  }
+
+  return result;
+}
+
 export function createEmptyTable(size: number): number[][] {
   const tableData: number[][] = []
 

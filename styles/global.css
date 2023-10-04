@@ -8,6 +8,10 @@ body {
   font-size: 18px;
 }
 
+html {
+  background-color: #181818;
+}
+
 * {
   box-sizing: border-box;
 }

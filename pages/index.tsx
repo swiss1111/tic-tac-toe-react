@@ -1,29 +1,15 @@
 import Head from 'next/head'
-import Layout from '../components/layout'
+import Layout from '../components/layout/layout'
 import utilStyles from '../styles/game.module.css'
-import {useEffect, useState} from 'react';
+import {useState} from 'react';
 import {createEmptyTable, createTableSizesArray, getWinner} from "../utils/gameUtils";
+import WinnerPopup from "../components/winnerPopup/winnerPopup";
 
 export default function Home() {
     const [size, setSize] = useState(3);
     const [table, setTable] = useState(createEmptyTable(size));
     const [currentPlayer, setCurrentPlayer] = useState(1);
     const [winner, setWinner] = useState(0);
-
-    useEffect(() => {
-        // TODO: create fancy winner popup
-        switch (winner) {
-            case 1:
-                alert("Winner: x");
-                break;
-            case 2:
-                alert("Winner: O");
-                break;
-            case 3:
-                alert("Draw");
-                break;
-        }
-    }, [winner])
 
     function changePlayer() {
         setCurrentPlayer(currentPlayer === 1 ? 2 : 1);
@@ -111,6 +97,7 @@ export default function Home() {
                         </div>
                     </div>
                 </div>
+                <WinnerPopup winner={winner} onClose={reset} onNewGame={reset}/>
             </div>
         </Layout>
     )

@@ -2,8 +2,9 @@ import Head from 'next/head'
 import Layout from '../components/layout/layout'
 import utilStyles from '../styles/game.module.css'
 import {useState} from 'react';
-import {createEmptyTable, createTableSizesArray, getWinner} from "../utils/gameUtils";
+import {boardStringify, createEmptyTable, createTableSizesArray, getWinner} from "../utils/gameUtils";
 import WinnerPopup from "../components/winnerPopup/winnerPopup";
+import {saveGame} from "../api/gameApi";
 
 export default function Home() {
     const [size, setSize] = useState(3);
@@ -22,7 +23,10 @@ export default function Home() {
     }
 
     function save() {
-        console.log("index.tsx save");
+        // TODO: get name from user
+        saveGame(boardStringify(table, size), "name")
+            .then(resp => console.log(resp))
+            .catch(error => console.log(error));
     }
 
     function sizeChange(size: number) {

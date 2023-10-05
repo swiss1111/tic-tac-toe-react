@@ -49,3 +49,21 @@ can get the next AI move by using the correct API endpoint.
 Responsive design
 The application should be responsive. Pages should be usable on small screen sizes too, as
 well as on desktop.
+
+## Project Setup
+
+```sh
+npm install
+```
+
+### Compile and Hot-Reload for Development
+
+```sh
+npm run dev
+```
+
+### Type-Check, Compile and Minify for Production
+
+```sh
+npm run build
+```

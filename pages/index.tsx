@@ -6,6 +6,7 @@ import {boardStringify, createEmptyTable, createTableSizesArray, getWinner} from
 import WinnerPopup from "../components/winnerPopup/winnerPopup";
 import {saveGame} from "../api/gameApi";
 import SavePopup from "../components/savePopup/savePopup";
+import Button from "../components/button/button";
 
 export default function Home() {
     const [size, setSize] = useState(3);
@@ -81,18 +82,13 @@ export default function Home() {
             </Head>
             <div className={utilStyles.tableWrapper}>
                 <div className={utilStyles.controllers}>
-                    <button className={utilStyles.controllersButton} onClick={() => {
-                        reset()
-                    }}>Reset
-                    </button>
-                    <button className={utilStyles.controllersButton} onClick={() => {
-                        onOpenSaveModal()
-                    }}>Save
-                    </button>
+                    <Button onClick={reset} title="Reset"/>
+                    <Button onClick={onOpenSaveModal} title="Save"/>
                     {createTableSizesArray().filter(newSize => newSize !== size).map(newSize => (
-                        <button key={newSize} className={utilStyles.controllersButton} onClick={() => {
+                        <Button key={newSize} onClick={() => {
                             sizeChange(newSize)
-                        }}>{`${newSize}x${newSize}`}</button>))}
+                        }} title={`${newSize}x${newSize}`}/>
+                    ))}
                 </div>
                 <div className={utilStyles.stretchyWrapper}>
                     <div className={utilStyles.container}>
@@ -114,7 +110,8 @@ export default function Home() {
                     </div>
                 </div>
                 <WinnerPopup winner={winner} onClose={reset} onNewGame={reset}/>
-                <SavePopup isOpenSaveModal={isOpenSaveModal} onSave={save} onClose={closeSaveModal} onCancel={closeSaveModal} />
+                <SavePopup isOpenSaveModal={isOpenSaveModal} onSave={save} onClose={closeSaveModal}
+                           onCancel={closeSaveModal}/>
             </div>
         </Layout>
     )

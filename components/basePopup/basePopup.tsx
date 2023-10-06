@@ -1,5 +1,6 @@
 import styles from './basePopup.module.css'
 import {ReactNode} from "react";
+import Button from "../button/button";
 
 interface BasePopupProps {
     isModalOpen: boolean
@@ -22,10 +23,7 @@ export default function BasePopup({isModalOpen, onClose, title, children}: BaseP
                         {title}
                     </div>
                     {onClose && (<div className={styles.closeButtonWrapper}>
-                        <button className={styles.closeButton} onClick={() => {
-                            onClose();
-                        }}>X
-                        </button>
+                        <Button onClick={onClose} title="X" />
                     </div>)}
                 </div>
                 <div className={styles.modalBody}>

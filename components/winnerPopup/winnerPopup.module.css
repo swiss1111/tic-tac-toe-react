@@ -8,17 +8,3 @@
     margin-top: 30px;
     text-align: center;
 }
-
-.newGameButton {
-    background-color: transparent;
-    margin: 0;
-    padding: 10px 20px;
-    border: 0;
-    color: hsla(160, 100%, 37%, 1);
-    transition: 0.4s;
-    font-size: 15px;
-}
-
-.newGameButton:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-}

@@ -1,6 +1,7 @@
 import styles from './winnerPopup.module.css'
 import React from "react";
 import BasePopup from "../basePopup/basePopup";
+import Button from "../button/button";
 
 interface WinnerPopupProps {
     winner: number
@@ -28,10 +29,7 @@ export default function WinnerPopup({winner, onClose, onNewGame}: WinnerPopupPro
         <BasePopup isModalOpen={!!winner} title="Game result:" onClose={onClose}>
             <p className={styles.winnerText}>{renderWinnerText()}</p>
             {onNewGame && (<div className={styles.newGameButtonWrapper}>
-                <button className={styles.newGameButton} onClick={() => {
-                    onNewGame();
-                }}>New Game
-                </button>
+                <Button onClick={onNewGame} title="New Game" />
             </div>)}
         </BasePopup>
     )

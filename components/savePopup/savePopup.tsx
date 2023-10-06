@@ -1,6 +1,7 @@
 import styles from './savePopup.module.css'
 import React, {useEffect, useState} from "react";
 import BasePopup from "../basePopup/basePopup";
+import Button from "../button/button";
 
 interface SavePopupProps {
     isOpenSaveModal: boolean
@@ -24,13 +25,10 @@ export default function SavePopup({isOpenSaveModal, onClose, onCancel, onSave}: 
                        onChange={event => setName(event.target.value)}/>
             </div>
             <div className={styles.buttonsWrapper}>
-                {onCancel && (<button className={styles.cancelButton} onClick={() => {
-                    onCancel();
-                }}>Cancel</button>)}
-                <button className={styles.saveButton} onClick={() => {
-                    onSave(name);
-                }}>Save
-                </button>
+                {onCancel && (
+                    <Button onClick={onCancel} title="Cancel" />
+                    )}
+                <Button onClick={() => {onSave(name)}} title="Save" />
             </div>
         </BasePopup>
     )

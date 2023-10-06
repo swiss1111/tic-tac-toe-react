@@ -29,31 +29,3 @@
     display: flex;
     justify-content: center;
 }
-
-.cancelButton {
-    background-color: transparent;
-    margin: 0;
-    padding: 10px 20px;
-    border: 0;
-    color: hsla(160, 100%, 37%, 1);
-    transition: 0.4s;
-    font-size: 15px;
-}
-
-.cancelButton:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-}
-
-.saveButton {
-    background-color: transparent;
-    margin: 0;
-    padding: 10px 20px;
-    border: 0;
-    color: hsla(160, 100%, 37%, 1);
-    transition: 0.4s;
-    font-size: 15px;
-}
-
-.saveButton:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-}

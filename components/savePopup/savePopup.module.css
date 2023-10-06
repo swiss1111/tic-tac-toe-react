@@ -1,0 +1,114 @@
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: hsla(160, 100%, 37%, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal {
+    min-width: 300px;
+    background-color: #181818;
+    padding: 10px;
+    border-radius: 3px;
+    box-shadow: 3px 3px 12px #181818;
+}
+
+.modalHeader {
+    display: flex;
+}
+
+.titleWrapper {
+    flex: 1;
+    padding: 10px 15px;
+    color: hsla(160, 100%, 37%, 1);
+    font-size: 15px;
+    line-height: 15px;
+}
+
+.closeButtonWrapper {
+
+}
+
+.closeButton {
+    background-color: transparent;
+    margin: 0;
+    padding: 10px 15px;
+    border: 0;
+    border-radius: 1px;
+    color: hsla(160, 100%, 37%, 1);
+    transition: 0.4s;
+    font-size: 15px;
+}
+
+.closeButton:hover {
+    background-color: hsla(160, 100%, 37%, 0.2);
+}
+
+.modalBody {
+    padding: 0 15px 30px 15px;
+}
+
+.questionText {
+    margin: 30px 0 0 0;
+    text-align: center;
+    color: hsla(160, 100%, 37%, 1);
+    font-weight: bold;
+}
+
+.inputWrapper {
+    margin: 30px 0 0 0;
+    display: flex;
+    justify-content: center;
+}
+
+.nameInput {
+    background: transparent;
+    padding: 10px 20px;
+    border: 1px solid hsla(160, 100%, 37%, 1);
+    outline: none;
+    color: hsla(160, 100%, 37%, 1);
+    font-size: 15px;
+}
+
+.nameInput::placeholder {
+    color: hsla(160, 100%, 37%, 0.2);
+}
+
+.buttonsWrapper {
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+}
+
+.cancelButton {
+    background-color: transparent;
+    margin: 0;
+    padding: 10px 20px;
+    border: 0;
+    color: hsla(160, 100%, 37%, 1);
+    transition: 0.4s;
+    font-size: 15px;
+}
+
+.cancelButton:hover {
+    background-color: hsla(160, 100%, 37%, 0.2);
+}
+
+.saveButton {
+    background-color: transparent;
+    margin: 0;
+    padding: 10px 20px;
+    border: 0;
+    color: hsla(160, 100%, 37%, 1);
+    transition: 0.4s;
+    font-size: 15px;
+}
+
+.saveButton:hover {
+    background-color: hsla(160, 100%, 37%, 0.2);
+}

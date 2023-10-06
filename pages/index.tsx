@@ -5,12 +5,14 @@ import {useState} from 'react';
 import {boardStringify, createEmptyTable, createTableSizesArray, getWinner} from "../utils/gameUtils";
 import WinnerPopup from "../components/winnerPopup/winnerPopup";
 import {saveGame} from "../api/gameApi";
+import SavePopup from "../components/savePopup/savePopup";
 
 export default function Home() {
     const [size, setSize] = useState(3);
     const [table, setTable] = useState(createEmptyTable(size));
     const [currentPlayer, setCurrentPlayer] = useState(1);
     const [winner, setWinner] = useState(0);
+    const [isOpenSaveModal, openSaveModal] = useState(false);
 
     function changePlayer() {
         setCurrentPlayer(currentPlayer === 1 ? 2 : 1);
@@ -22,11 +24,21 @@ export default function Home() {
         setWinner(0);
     }
 
-    function save() {
-        // TODO: get name from user
-        saveGame(boardStringify(table, size), "name")
-            .then(resp => console.log(resp))
+    function save(name: string) {
+        saveGame(boardStringify(table, size), name)
+            .then(resp => {
+                openSaveModal(false);
+                console.log(resp)
+            })
             .catch(error => console.log(error));
+    }
+
+    function onOpenSaveModal() {
+        openSaveModal(true);
+    }
+
+    function closeSaveModal() {
+        openSaveModal(false);
     }
 
     function sizeChange(size: number) {
@@ -74,7 +86,7 @@ export default function Home() {
                     }}>Reset
                     </button>
                     <button className={utilStyles.controllersButton} onClick={() => {
-                        save()
+                        onOpenSaveModal()
                     }}>Save
                     </button>
                     {createTableSizesArray().filter(newSize => newSize !== size).map(newSize => (
@@ -102,6 +114,7 @@ export default function Home() {
                     </div>
                 </div>
                 <WinnerPopup winner={winner} onClose={reset} onNewGame={reset}/>
+                <SavePopup isOpenSaveModal={isOpenSaveModal} onSave={save} onClose={closeSaveModal} onCancel={closeSaveModal} />
             </div>
         </Layout>
     )

@@ -37,9 +37,14 @@ export default function GameTable({id}: GameTableProps) {
     }
 
     function reset() {
-        setTable(createEmptyTable(size));
-        setCurrentPlayer(1);
-        setWinner(0);
+        if( id ) {
+            router.push("/");
+        }
+        else {
+            setTable(createEmptyTable(size));
+            setCurrentPlayer(1);
+            setWinner(0);
+        }
     }
 
     function save(name: string) {

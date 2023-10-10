@@ -4,6 +4,7 @@ import {useEffect, useState} from "react";
 import {deleteGame, getGames} from "../api/gameApi";
 import styles from '../styles/gameList.module.css'
 import Button from "../components/button/button";
+import {useRouter} from "next/navigation";
 
 type Game = {
     id: number
@@ -12,6 +13,8 @@ type Game = {
 }
 
 export default function Home() {
+    const router = useRouter()
+
     const [games, setGames] = useState([] as Game[]);
 
     useEffect(() => {
@@ -33,6 +36,10 @@ export default function Home() {
         }
 
         setGames(gameList);
+    }
+
+    function onLoad(id: number) {
+        router.push(`/${id}`);
     }
 
     function onDelete(id: number) {
@@ -58,7 +65,9 @@ export default function Home() {
                         <div className={styles.gameId}>{game.id}</div>
                         <div className={styles.gameName}>{game.name}</div>
                         <div className={styles.gameControllers}>
-                            <Button onClick={() => {}} title="Load" />
+                            <Button onClick={() => {
+                                onLoad(game.id);
+                            }} title="Load" />
                             <Button onClick={() => {
                                 onDelete(game.id);
                             }} title="Delete" />

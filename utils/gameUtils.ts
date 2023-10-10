@@ -1,116 +1,127 @@
+type ParsedGameType = {
+    table: number[][],
+    size: number,
+    currentPlayer: number
+}
+
 export function createTableSizesArray(start = 3, end = 7): number[] {
-  const result: number[] = [];
+    const result: number[] = [];
 
-  for (let i = start; i <= end; i++) {
-    result.push(i);
-  }
+    for (let i = start; i <= end; i++) {
+        result.push(i);
+    }
 
-  return result;
+    return result;
 }
 
 export function createEmptyTable(size: number): number[][] {
-  const tableData: number[][] = []
+    const tableData: number[][] = []
 
-  for (let i = 0; i < size; i++) {
-    const row: number[] = []
-    for (let j = 0; j < size; j++) {
-      row.push(0)
+    for (let i = 0; i < size; i++) {
+        const row: number[] = []
+        for (let j = 0; j < size; j++) {
+            row.push(0)
+        }
+        tableData.push(row)
     }
-    tableData.push(row)
-  }
 
-  return tableData;
+    return tableData;
 }
 
-export function parseTableData(board: string): {table: number[][], size:number} {
-  const data = {
-    table: [],
-    size: 3
-  } as any
+export function parseTableData(board: string): ParsedGameType {
+    const data = {
+        table: [],
+        size: 3,
+        currentPlayer: 1
+    } as ParsedGameType;
 
-  data.size = Math.sqrt(board.length);
+    data.size = Math.sqrt(board.length);
 
-  const array: number[][] = [];
+    const array: number[][] = [];
+    const firstPlayer: number = Array.from(board).filter(cell => cell === "1").length;
+    const secondPlayer: number = Array.from(board).filter(cell => cell === "2").length;
 
-  for (let i = 0; i < data.size; i++) {
-    const row: number[] = [];
-    for (let j = 0; j < data.size; j++) {
-      row.push(Number(board[i * data.size + j]));
+    for (let i = 0; i < data.size; i++) {
+        const row: number[] = [];
+        for (let j = 0; j < data.size; j++) {
+            row.push(Number(board[i * data.size + j]));
+        }
+        array.push(row);
     }
-    array.push(row);
-  }
 
-  data.table = array;
+    data.table = array;
 
-  return data;
+    data.currentPlayer = firstPlayer > secondPlayer ? 2 : 1;
+
+    return data;
 }
 
-export function boardStringify(board: number[][], size:number): string {
-  let string = "";
+export function boardStringify(board: number[][], size: number): string {
+    let string = "";
 
-  for (let i = 0; i < size; i++) {
-    for (let j = 0; j < size; j++) {
-      string += board[i][j];
+    for (let i = 0; i < size; i++) {
+        for (let j = 0; j < size; j++) {
+            string += board[i][j];
+        }
     }
-  }
 
-  return string;
+    return string;
 }
 
 export function transposedArry(board: number[][]) {
-  return board[0].map((_, colIndex) => board.map(row => row[colIndex]));
+    return board[0].map((_, colIndex) => board.map(row => row[colIndex]));
 }
 
-export function getWinner( board: number[][], size: number ): number {
-  // row
-  for(let i = 0; i < size; i++) {
-    if( board[i].every( cell => cell === 1) ) {
-      return 1;
+export function getWinner(board: number[][], size: number): number {
+    // row
+    for (let i = 0; i < size; i++) {
+        if (board[i].every(cell => cell === 1)) {
+            return 1;
+        }
+        if (board[i].every(cell => cell === 2)) {
+            return 2;
+        }
     }
-    if( board[i].every( cell => cell === 2) ) {
-      return 2;
-    }
-  }
 
-  // col
-  const tBoard = transposedArry(board);
+    // col
+    const tBoard = transposedArry(board);
 
-  for(let i = 0; i < size; i++) {
-    if( tBoard[i].every( cell => cell === 1) ) {
-      return 1;
+    for (let i = 0; i < size; i++) {
+        if (tBoard[i].every(cell => cell === 1)) {
+            return 1;
+        }
+        if (tBoard[i].every(cell => cell === 2)) {
+            return 2;
+        }
     }
-    if( tBoard[i].every( cell => cell === 2) ) {
-      return 2;
-    }
-  }
 
-  let diff = false;
-  for (let i = 1; i < size; i++) {
-    if (board[i][i] !== board[0][0]) {
-      diff = true;
+    let diff = false;
+    for (let i = 1; i < size; i++) {
+        if (board[i][i] !== board[0][0]) {
+            diff = true;
+        }
     }
-  }
-  if (!diff) {
-    return board[0][0];
-  }
-
-  diff = false;
-  for (let i = 0; i < size; i++) {
-    if (board[i][size-i-1] !== board[0][size-1]) {
-      diff = true;
+    if (!diff) {
+        return board[0][0];
     }
-  }
-  if (!diff) {
-    return board[0][size-1];
-  }
 
-  for (let i = 0; i < size; i++) {
-    for (let j = 0; j < size; j++) {
-      if(board[i][j] === 0) {
-        return 0
-      }
+    diff = false;
+    for (let i = 0; i < size; i++) {
+        if (board[i][size - i - 1] !== board[0][size - 1]) {
+            diff = true;
+        }
     }
-  }
+    if (!diff) {
+        return board[0][size - 1];
+    }
 
-  return 3;
+    for (let i = 0; i < size; i++) {
+        for (let j = 0; j < size; j++) {
+            if (board[i][j] === 0) {
+                return 0
+            }
+        }
+    }
+
+    return 3;
 }

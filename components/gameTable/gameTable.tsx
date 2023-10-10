@@ -77,6 +77,7 @@ export default function GameTable({id}: GameTableProps) {
                     const parsedGameData = parseTableData(resp.board);
                     setSize(parsedGameData.size);
                     setTable(parsedGameData.table);
+                    setCurrentPlayer(parsedGameData.currentPlayer)
                 })
                 .catch(error => {
                     console.log(error)

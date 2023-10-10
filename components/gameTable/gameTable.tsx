@@ -142,15 +142,18 @@ export default function GameTable({id}: GameTableProps) {
             </Head>
             <div className={styles.tableWrapper}>
                 <div className={styles.controllers}>
+                    <Button onClick={onNavigateToGameList} title="Game list"/>
                     <Button onClick={reset} title="Reset"/>
                     {!!id ? (<Button onClick={onModifyModal} title="Modify"/>) : (
-                        <Button onClick={onOpenSaveModal} title="Save"/>)}
-                    <Button onClick={onNavigateToGameList} title="Game list"/>
-                    {createTableSizesArray().filter(newSize => newSize !== size).map(newSize => (
-                        <Button key={newSize} onClick={() => {
-                            sizeChange(newSize)
-                        }} title={`${newSize}x${newSize}`}/>
-                    ))}
+                        <>
+                            <Button onClick={onOpenSaveModal} title="Save"/>
+                            {createTableSizesArray().filter(newSize => newSize !== size).map(newSize => (
+                                <Button key={newSize} onClick={() => {
+                                    sizeChange(newSize)
+                                }} title={`${newSize}x${newSize}`}/>
+                            ))}
+                        </>
+                    )}
                 </div>
                 <div className={styles.stretchyWrapper}>
                     <div className={styles.container}>

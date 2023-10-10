@@ -9,7 +9,7 @@ import {
     getWinner,
     parseTableData
 } from "../../utils/gameUtils";
-import {getGame, saveGame} from "../../api/gameApi";
+import {getGame, modifyGame, saveGame} from "../../api/gameApi";
 import Layout from "../layout/layout";
 import Head from "next/head";
 import WinnerPopup from "../winnerPopup/winnerPopup";
@@ -37,10 +37,9 @@ export default function GameTable({id}: GameTableProps) {
     }
 
     function reset() {
-        if( id ) {
+        if (id) {
             router.push("/");
-        }
-        else {
+        } else {
             setTable(createEmptyTable(size));
             setCurrentPlayer(1);
             setWinner(0);
@@ -48,15 +47,27 @@ export default function GameTable({id}: GameTableProps) {
     }
 
     function save(name: string) {
-        saveGame(boardStringify(table, size), name)
-            .then(() => {
-                openSaveModal(false);
-                // TODO: Success message
-            })
-            .catch(error => {
-                console.log(error)
-                // TODO: Error message
-            });
+        if (id) {
+            modifyGame(id, boardStringify(table, size), name)
+                .then(() => {
+                    openSaveModal(false);
+                    // TODO: Success message
+                })
+                .catch(error => {
+                    console.log(error)
+                    // TODO: Error message
+                });
+        } else {
+            saveGame(boardStringify(table, size), name)
+                .then(() => {
+                    openSaveModal(false);
+                    // TODO: Success message
+                })
+                .catch(error => {
+                    console.log(error)
+                    // TODO: Error message
+                });
+        }
     }
 
     function loadGame() {
@@ -72,6 +83,10 @@ export default function GameTable({id}: GameTableProps) {
                     // TODO: Error message
                 });
         }
+    }
+
+    function onModifyModal() {
+        openSaveModal(true);
     }
 
     function onOpenSaveModal() {
@@ -127,7 +142,8 @@ export default function GameTable({id}: GameTableProps) {
             <div className={styles.tableWrapper}>
                 <div className={styles.controllers}>
                     <Button onClick={reset} title="Reset"/>
-                    <Button onClick={onOpenSaveModal} title="Save"/>
+                    {!!id ? (<Button onClick={onModifyModal} title="Modify"/>) : (
+                        <Button onClick={onOpenSaveModal} title="Save"/>)}
                     <Button onClick={onNavigateToGameList} title="Game list"/>
                     {createTableSizesArray().filter(newSize => newSize !== size).map(newSize => (
                         <Button key={newSize} onClick={() => {

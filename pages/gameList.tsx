@@ -23,12 +23,28 @@ export default function Home() {
 
     }, [])
 
+    function removeGameFromList(id: number) {
+        const gameList = [...games];
+
+        const objWithIdIndex = gameList.findIndex((obj) => obj.id === id);
+
+        if (objWithIdIndex > -1) {
+            gameList.splice(objWithIdIndex, 1);
+        }
+
+        setGames(gameList);
+    }
+
     function onDelete(id: number) {
         deleteGame(id)
-            .then(resp => {
-                console.log(resp);
+            .then(() => {
+                removeGameFromList(id);
+                // TODO: Success message
             })
-            .catch(error => console.log(error));
+            .catch(error => {
+                console.log(error)
+                // TODO: Error message
+            });
     }
 
     return (

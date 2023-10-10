@@ -23,8 +23,15 @@ async function fetchData(url = "", data: any = undefined, method: MethodType = "
         console.log('There was an error', error);
     }
 
+    const contentLength = response?.headers.get("content-length");
+
     if (response?.ok) {
-        return response.json();
+        if(!!contentLength && parseInt(contentLength) > 0) {
+            return response?.json();
+        }
+        else {
+            return {};
+        }
     } else {
         return Promise.reject(response);
     }

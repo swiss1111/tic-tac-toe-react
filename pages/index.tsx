@@ -7,8 +7,11 @@ import WinnerPopup from "../components/winnerPopup/winnerPopup";
 import {saveGame} from "../api/gameApi";
 import SavePopup from "../components/savePopup/savePopup";
 import Button from "../components/button/button";
+import {useRouter} from "next/navigation";
 
 export default function Home() {
+    const router = useRouter()
+
     const [size, setSize] = useState(3);
     const [table, setTable] = useState(createEmptyTable(size));
     const [currentPlayer, setCurrentPlayer] = useState(1);
@@ -27,15 +30,22 @@ export default function Home() {
 
     function save(name: string) {
         saveGame(boardStringify(table, size), name)
-            .then(resp => {
+            .then(() => {
                 openSaveModal(false);
-                console.log(resp)
+                // TODO: Success message
             })
-            .catch(error => console.log(error));
+            .catch(error => {
+                console.log(error)
+                // TODO: Error message
+            });
     }
 
     function onOpenSaveModal() {
         openSaveModal(true);
+    }
+
+    function onNavigateToGameList() {
+        router.push('/gameList');
     }
 
     function closeSaveModal() {
@@ -84,6 +94,7 @@ export default function Home() {
                 <div className={utilStyles.controllers}>
                     <Button onClick={reset} title="Reset"/>
                     <Button onClick={onOpenSaveModal} title="Save"/>
+                    <Button onClick={onNavigateToGameList} title="Game list"/>
                     {createTableSizesArray().filter(newSize => newSize !== size).map(newSize => (
                         <Button key={newSize} onClick={() => {
                             sizeChange(newSize)

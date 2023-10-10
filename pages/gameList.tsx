@@ -4,7 +4,7 @@ import {useEffect, useState} from "react";
 import {deleteGame, getGames} from "../api/gameApi";
 import styles from '../styles/gameList.module.css'
 import Button from "../components/button/button";
-import {useRouter} from "next/navigation";
+import {useRouter} from "next/router";
 
 type Game = {
     id: number

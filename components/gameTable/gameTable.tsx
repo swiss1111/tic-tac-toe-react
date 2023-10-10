@@ -1,9 +1,15 @@
 import styles from './gameTable.module.css'
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import Button from "../button/button";
-import {useRouter} from "next/navigation";
-import {boardStringify, createEmptyTable, createTableSizesArray, getWinner} from "../../utils/gameUtils";
-import {saveGame} from "../../api/gameApi";
+import {useRouter} from "next/router";
+import {
+    boardStringify,
+    createEmptyTable,
+    createTableSizesArray,
+    getWinner,
+    parseTableData
+} from "../../utils/gameUtils";
+import {getGame, saveGame} from "../../api/gameApi";
 import Layout from "../layout/layout";
 import Head from "next/head";
 import WinnerPopup from "../winnerPopup/winnerPopup";
@@ -13,7 +19,7 @@ interface GameTableProps {
     id?: number
 }
 
-export default function GameTable({ id }: GameTableProps) {
+export default function GameTable({id}: GameTableProps) {
     const router = useRouter()
 
     const [size, setSize] = useState(3);
@@ -21,6 +27,10 @@ export default function GameTable({ id }: GameTableProps) {
     const [currentPlayer, setCurrentPlayer] = useState(1);
     const [winner, setWinner] = useState(0);
     const [isOpenSaveModal, openSaveModal] = useState(false);
+
+    useEffect(() => {
+        loadGame();
+    }, [id])
 
     function changePlayer() {
         setCurrentPlayer(currentPlayer === 1 ? 2 : 1);
@@ -42,6 +52,21 @@ export default function GameTable({ id }: GameTableProps) {
                 console.log(error)
                 // TODO: Error message
             });
+    }
+
+    function loadGame() {
+        if (id) {
+            getGame(id)
+                .then(resp => {
+                    const parsedGameData = parseTableData(resp.board);
+                    setSize(parsedGameData.size);
+                    setTable(parsedGameData.table);
+                })
+                .catch(error => {
+                    console.log(error)
+                    // TODO: Error message
+                });
+        }
     }
 
     function onOpenSaveModal() {

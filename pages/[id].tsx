@@ -1,13 +1,12 @@
 import GameTable from "../components/gameTable/gameTable";
+import {useRouter} from "next/router";
 
-interface LoadedGameProps {
-    params: {
-        id: number
-    }
-}
+export default function Id() {
+    const router = useRouter();
+    const params = router?.query;
+    const id = parseInt(params?.id as string);
 
-export default function Id({ params }: LoadedGameProps) {
     return (
-        <GameTable id={params.id} />
+        <GameTable id={id} />
     )
 }

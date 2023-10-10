@@ -1,0 +1,29 @@
+.gameList {
+
+}
+
+.gameWrapper {
+    display: flex;
+    border-bottom: 1px solid hsla(160, 100%, 37%, 1);
+}
+
+.gameWrapper:last-child {
+    border-bottom: none;
+}
+
+.gameId {
+    padding: 10px 15px;
+    font-size: 15px;
+    line-height: 15px;
+}
+
+.gameName {
+    flex: 1;
+    padding: 10px 15px;
+    font-size: 15px;
+    line-height: 15px;
+}
+
+.gameControllers {
+
+}

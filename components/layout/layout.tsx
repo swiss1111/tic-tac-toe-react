@@ -38,7 +38,7 @@ export default function Layout({children, home}: LayoutProps) {
             <main>{children}</main>
             {!home && (
                 <div className={styles.backToHome}>
-                    <Link href="/">← Back to home</Link>
+                    <Link href="/">Back to game</Link>
                 </div>
             )}
         </div>

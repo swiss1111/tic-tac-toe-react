@@ -1,6 +1,14 @@
 import '../styles/global.css'
-import { AppProps } from 'next/app'
+import 'react-toastify/dist/ReactToastify.css';
+import {AppProps} from 'next/app'
+import {ToastContainer} from 'react-toastify';
 
-export default function App({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
+
+export default function App({Component, pageProps}: AppProps) {
+    return (
+        <>
+            <Component {...pageProps} />
+            <ToastContainer/>
+        </>
+    )
 }

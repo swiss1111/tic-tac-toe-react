@@ -14,6 +14,7 @@ import Layout from "../layout/layout";
 import Head from "next/head";
 import WinnerPopup from "../winnerPopup/winnerPopup";
 import SavePopup from "../savePopup/savePopup";
+import {toast} from "react-toastify";
 
 interface GameTableProps {
     id?: number
@@ -51,21 +52,21 @@ export default function GameTable({id}: GameTableProps) {
             modifyGame(id, boardStringify(table, size), name)
                 .then(() => {
                     openSaveModal(false);
-                    // TODO: Success message
+                    toast("Modify successful", { hideProgressBar: true, autoClose: 2000, type: 'success', position:'bottom-right' });
                 })
                 .catch(error => {
                     console.log(error)
-                    // TODO: Error message
+                    toast("Modify error", { hideProgressBar: true, autoClose: 2000, type: 'error', position:'bottom-right' });
                 });
         } else {
             saveGame(boardStringify(table, size), name)
                 .then(() => {
                     openSaveModal(false);
-                    // TODO: Success message
+                    toast("Save successful", { hideProgressBar: true, autoClose: 2000, type: 'success', position:'bottom-right' });
                 })
                 .catch(error => {
                     console.log(error)
-                    // TODO: Error message
+                    toast("Save error", { hideProgressBar: true, autoClose: 2000, type: 'error', position:'bottom-right' });
                 });
         }
     }
@@ -81,7 +82,7 @@ export default function GameTable({id}: GameTableProps) {
                 })
                 .catch(error => {
                     console.log(error)
-                    // TODO: Error message
+                    toast("Game loading error", { hideProgressBar: true, autoClose: 2000, type: 'error', position:'bottom-right' });
                 });
         }
     }

@@ -5,6 +5,7 @@ import {deleteGame, getGames} from "../api/gameApi";
 import styles from '../styles/gameList.module.css'
 import Button from "../components/button/button";
 import {useRouter} from "next/router";
+import { toast } from "react-toastify";
 
 type Game = {
     id: number
@@ -45,12 +46,11 @@ export default function Home() {
     function onDelete(id: number) {
         deleteGame(id)
             .then(() => {
-                removeGameFromList(id);
-                // TODO: Success message
+                removeGameFromList(id)
             })
             .catch(error => {
                 console.log(error)
-                // TODO: Error message
+                toast("Delete error", { hideProgressBar: true, autoClose: 2000, type: 'error', position:'bottom-right' });
             });
     }
 
@@ -59,22 +59,28 @@ export default function Home() {
             <Head>
                 <title>Tic-tac-toe game</title>
             </Head>
-            <div className={styles.gameList}>
-                {games.map(game => (
-                    <div key={game.id} className={styles.gameWrapper}>
-                        <div className={styles.gameId}>{game.id}</div>
-                        <div className={styles.gameName}>{game.name}</div>
-                        <div className={styles.gameControllers}>
-                            <Button onClick={() => {
-                                onLoad(game.id);
-                            }} title="Load" />
-                            <Button onClick={() => {
-                                onDelete(game.id);
-                            }} title="Delete" />
+            {games.length > 0 ? (
+                <div className={styles.gameList}>
+                    {games.map(game => (
+                        <div key={game.id} className={styles.gameWrapper}>
+                            <div className={styles.gameId}>{game.id}</div>
+                            <div className={styles.gameName}>{game.name}</div>
+                            <div className={styles.gameControllers}>
+                                <Button onClick={() => {
+                                    onLoad(game.id);
+                                }} title="Load"/>
+                                <Button onClick={() => {
+                                    onDelete(game.id);
+                                }} title="Delete"/>
+                            </div>
                         </div>
-                    </div>
-                ))}
-            </div>
+                    ))}
+                </div>
+            ) : (
+                <div className={styles.emptyGameList}>
+                    There are no saved games
+                </div>
+            )}
         </Layout>
     )
 }

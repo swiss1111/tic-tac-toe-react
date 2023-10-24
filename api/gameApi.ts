@@ -37,11 +37,8 @@ async function fetchData(url = "", data: any = undefined, method: MethodType = "
     }
 }
 
-export function opponentMove(player: 1 | 2, board: string): Promise<any> {
-    return fetchData('/opponent-move', {
-        player,
-        board,
-    });
+export function opponentMove(player: number, board: string): Promise<any> {
+    return fetchData(`/opponent-move?player=${player}&board=${board}`);
 }
 
 export function getGames(): Promise<any> {

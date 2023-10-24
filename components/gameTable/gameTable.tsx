@@ -9,7 +9,7 @@ import {
     getWinner,
     parseTableData
 } from "../../utils/gameUtils";
-import {getGame, modifyGame, saveGame} from "../../api/gameApi";
+import {getGame, modifyGame, opponentMove, saveGame} from "../../api/gameApi";
 import Layout from "../layout/layout";
 import Head from "next/head";
 import WinnerPopup from "../winnerPopup/winnerPopup";
@@ -20,6 +20,14 @@ interface GameTableProps {
     id?: number
 }
 
+interface OpponentMoveResponse {
+    board: string
+    index: number
+    isDraw: boolean
+    player: number
+    winning: number
+}
+
 export default function GameTable({id}: GameTableProps) {
     const router = useRouter()
 
@@ -27,11 +35,19 @@ export default function GameTable({id}: GameTableProps) {
     const [table, setTable] = useState(createEmptyTable(size));
     const [currentPlayer, setCurrentPlayer] = useState(1);
     const [winner, setWinner] = useState(0);
+    const [gameWithAi, setAi] = useState(false);
     const [isOpenSaveModal, openSaveModal] = useState(false);
 
     useEffect(() => {
         loadGame();
     }, [id])
+
+    useEffect(() => {
+        if (gameWithAi && currentPlayer === 2 && !winner) {
+            aiStep();
+        }
+        loadGame();
+    }, [currentPlayer])
 
     function changePlayer() {
         setCurrentPlayer(currentPlayer === 1 ? 2 : 1);
@@ -52,21 +68,41 @@ export default function GameTable({id}: GameTableProps) {
             modifyGame(id, boardStringify(table, size), name)
                 .then(() => {
                     openSaveModal(false);
-                    toast("Modify successful", { hideProgressBar: true, autoClose: 2000, type: 'success', position:'bottom-right' });
+                    toast("Modify successful", {
+                        hideProgressBar: true,
+                        autoClose: 2000,
+                        type: 'success',
+                        position: 'bottom-right'
+                    });
                 })
                 .catch(error => {
                     console.log(error)
-                    toast("Modify error", { hideProgressBar: true, autoClose: 2000, type: 'error', position:'bottom-right' });
+                    toast("Modify error", {
+                        hideProgressBar: true,
+                        autoClose: 2000,
+                        type: 'error',
+                        position: 'bottom-right'
+                    });
                 });
         } else {
             saveGame(boardStringify(table, size), name)
                 .then(() => {
                     openSaveModal(false);
-                    toast("Save successful", { hideProgressBar: true, autoClose: 2000, type: 'success', position:'bottom-right' });
+                    toast("Save successful", {
+                        hideProgressBar: true,
+                        autoClose: 2000,
+                        type: 'success',
+                        position: 'bottom-right'
+                    });
                 })
                 .catch(error => {
                     console.log(error)
-                    toast("Save error", { hideProgressBar: true, autoClose: 2000, type: 'error', position:'bottom-right' });
+                    toast("Save error", {
+                        hideProgressBar: true,
+                        autoClose: 2000,
+                        type: 'error',
+                        position: 'bottom-right'
+                    });
                 });
         }
     }
@@ -82,7 +118,12 @@ export default function GameTable({id}: GameTableProps) {
                 })
                 .catch(error => {
                     console.log(error)
-                    toast("Game loading error", { hideProgressBar: true, autoClose: 2000, type: 'error', position:'bottom-right' });
+                    toast("Game loading error", {
+                        hideProgressBar: true,
+                        autoClose: 2000,
+                        type: 'error',
+                        position: 'bottom-right'
+                    });
                 });
         }
     }
@@ -93,6 +134,11 @@ export default function GameTable({id}: GameTableProps) {
 
     function onOpenSaveModal() {
         openSaveModal(true);
+    }
+
+    function toggleAiGame() {
+        setAi(!gameWithAi);
+        reset();
     }
 
     function onNavigateToGameList() {
@@ -127,6 +173,25 @@ export default function GameTable({id}: GameTableProps) {
         }
     }
 
+    function aiStep() {
+        opponentMove(2, boardStringify(table, size))
+            .then(resp => {
+                const parsedGameData = parseTableData((resp as OpponentMoveResponse).board);
+                setTable(parsedGameData.table);
+                setCurrentPlayer(parsedGameData.currentPlayer)
+                setWinner(getWinner(parsedGameData.table, size));
+            })
+            .catch(error => {
+                console.log(error)
+                toast("AI step error", {
+                    hideProgressBar: true,
+                    autoClose: 2000,
+                    type: 'error',
+                    position: 'bottom-right'
+                });
+            });
+    }
+
     function renderText(value: number): string {
         if (value === 1) {
             return 'X'
@@ -153,6 +218,7 @@ export default function GameTable({id}: GameTableProps) {
                                     sizeChange(newSize)
                                 }} title={`${newSize}x${newSize}`}/>
                             ))}
+                            <Button onClick={toggleAiGame} title={gameWithAi ? "New PvP Game " : "New PvE Game"}/>
                         </>
                     )}
                 </div>
@@ -165,7 +231,7 @@ export default function GameTable({id}: GameTableProps) {
                                         <div className={styles.cell} key={`col-${rowIndex}`}>
                                             <button className={styles.tableButton} onClick={() => {
                                                 cellClick(colIndex, rowIndex)
-                                            }}>
+                                            }} disabled={gameWithAi && currentPlayer === 2}>
                                                 {renderText(cell)}
                                             </button>
                                         </div>

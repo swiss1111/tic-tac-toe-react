@@ -137,6 +137,11 @@ export default function GameTable({id}: GameTableProps) {
     }
 
     function toggleAiGame() {
+        if(!gameWithAi) {
+            // TODO: Remove this alert if BE can handle games on a larger board.
+            alert("Only the 3x3 game can be played against the AI.")
+        }
+
         setAi(!gameWithAi);
         reset();
     }

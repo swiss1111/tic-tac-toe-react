@@ -68,7 +68,7 @@ export function boardStringify(board: number[][], size: number): string {
     return string;
 }
 
-export function transposedArry(board: number[][]) {
+export function transposedArray(board: number[][]) {
     return board[0].map((_, colIndex) => board.map(row => row[colIndex]));
 }
 
@@ -84,7 +84,7 @@ export function getWinner(board: number[][], size: number): number {
     }
 
     // col
-    const tBoard = transposedArry(board);
+    const tBoard = transposedArray(board);
 
     for (let i = 0; i < size; i++) {
         if (tBoard[i].every(cell => cell === 1)) {

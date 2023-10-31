@@ -67,3 +67,83 @@ npm run dev
 ```sh
 npm run build
 ```
+
+## Backend application and API documentation
+To run the backend application you need to install the docker engine and docker-compose.
+You can find instructions here:
+
+https://docs.docker.com/engine/install/
+
+https://docs.docker.com/compose/install/
+
+Create a docker-compose.yml file in the root directory of your project, with docker-compose.yml file in root library
+
+```
+version: "3.7"
+
+services:
+  tic-tac-toe-backend:
+    image: precognoxkft/tic-tac-toe-backend:1.0.0
+    container_name: tic-tac-toe-backend
+    ports:
+      - "5000:5000"
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=nestjs
+      - PORT=5000
+    networks:
+      - tic-tac-toe-network
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./data/postgres:/data/postgres
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=nestjs
+    networks:
+      - tic-tac-toe-network
+
+networks:
+  tic-tac-toe-network:
+    driver: bridge
+```
+
+Then in the same root directory, run the following command:
+
+```sh
+docker-compose up
+```
+
+The backend application will start up and will be available on http://localhost:5000. The API
+documentation is available at http://localhost:5000/api-docs/. Here you can find all the
+necessary API endpoints to complete the test.
+
+You can stop the running backend application with the following command:
+
+```sh
+docker-compose stop
+```
+
+You can remove the backend container if you don’t need it anymore with the following
+command:
+
+```sh
+docker-compose down
+```
+
+You can remove the backend image too if you don’t need it anymore with the following
+command:
+
+```sh
+docker image rm precognoxkft/tic-tac-toe-backend:1.0.0 postgres:latest
+```

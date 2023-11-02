@@ -46,7 +46,6 @@ export default function GameTable({id}: GameTableProps) {
         if (gameWithAi && currentPlayer === 2 && !winner) {
             aiStep();
         }
-        loadGame();
     }, [currentPlayer])
 
     function changePlayer() {
